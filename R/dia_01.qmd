@@ -1,0 +1,43 @@
+---
+title: "7 Days of Code - Dia 1"
+author: "pabsantos"
+format: html
+execute: 
+  warning: false
+  message: false
+editor: visual
+---
+
+## 7 Days of Code - Dia 1
+
+### Carregando Pacotes
+
+```{r}
+#| label: packages
+
+library(tidyverse)
+```
+
+### Carregando Dados do CEAPS
+
+Download dos dados de 2017 à 2021:
+
+```{r}
+#| label: load-data
+
+urls <- c(
+  "https://www.senado.gov.br/transparencia/LAI/verba/despesa_ceaps_2021.csv",
+  "https://www.senado.gov.br/transparencia/LAI/verba/despesa_ceaps_2020.csv",
+  "https://www.senado.gov.br/transparencia/LAI/verba/despesa_ceaps_2019.csv",
+  "https://www.senado.gov.br/transparencia/LAI/verba/despesa_ceaps_2018.csv",
+  "https://www.senado.gov.br/transparencia/LAI/verba/despesa_ceaps_2017.csv"
+)
+
+if (file.exists("data/despesa_ceaps.rds")) {
+  ceaps <- readRDS("data/despesa_ceaps.rds")
+} else {
+  ceaps <- map(urls, ~read_csv2(.x, skip = 1))
+  ceaps <- reduce(ceaps, bind_rows)
+  #saveRDS(ceaps, "data/despesa_ceaps.rds")
+}
+```
