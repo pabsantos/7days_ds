@@ -5,12 +5,11 @@ format: html
 execute: 
   warning: false
   message: false
+  cache: true
 editor: visual
 ---
 
-## 7 Days of Code - Dia 1
-
-### Carregando Pacotes
+## Carregando Pacotes
 
 ```{r}
 #| label: packages
@@ -18,9 +17,9 @@ editor: visual
 library(tidyverse)
 ```
 
-### Carregando Dados do CEAPS
+## Carregando Dados do CEAPS
 
-Download dos dados de 2017 à 2021:
+Download dos dados de 2017 à 2021. A primeira linha possui metadados, então foi removida. Por padrão, os dados são lidos em UTF-8, o que causa um erro em strings com acento.
 
 ```{r}
 #| label: load-data
@@ -40,4 +39,69 @@ if (file.exists("data/despesa_ceaps.rds")) {
   ceaps <- reduce(ceaps, bind_rows)
   #saveRDS(ceaps, "data/despesa_ceaps.rds")
 }
+```
+
+## Variáveis
+
+```{r}
+#| label: variables
+
+skimr::skim(ceaps)
+```
+
+Variáveis com valores vazios: DOCUMENTO e DETALHAMENTO.
+
+Verificando os valores únicos de TIPO_DESPESA:
+
+```{r}
+#| label: despesa
+
+unique(ceaps$TIPO_DESPESA)
+```
+
+## Modificando Valores
+
+Modificação de valores para facilitar a análise:
+
+-   Limpar o nome das variaveis;
+
+```{=html}
+<!-- -->
+```
+-   Modificar enconding das strings para "latin1";
+
+```{=html}
+<!-- -->
+```
+-   Modificar os tipos em TIPO_DESPESA;
+
+-   Modificar a variável DATA para o formato dd/mm/yyyy.
+
+```{r}
+#| label: wrangling
+
+ceaps <- ceaps %>% 
+  janitor::clean_names() %>% 
+  mutate(across(where(is.character), ~str_conv(.x, "latin1"))) %>% 
+  mutate(tipo_despesa = case_when(
+    str_starts(tipo_despesa, "Aluguel") ~ "Aluguel de Imóveis",
+    str_starts(tipo_despesa, "Passagens") ~ 
+      "Passagens de transporte",
+    str_starts(tipo_despesa, "Contratação") ~ "Contratações",
+    str_starts(tipo_despesa, "Aquisição") ~ 
+      "Materiais e equipamentos",
+    TRUE ~ tipo_despesa
+    ),
+    data = lubridate::dmy(data)
+  )
+
+knitr::kable(head(ceaps))
+```
+
+Salvando a nova versão
+
+```{r}
+#| label: save
+
+#saveRDS(ceaps, "data/despesa_ceaps_corrigido.rds")
 ```
