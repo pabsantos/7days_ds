@@ -2,26 +2,100 @@
 title: "7 Days of Code - Dia 2"
 author: "pabsantos"
 format: html
+execute: 
+  warning: false
+  message: false
+  cache: true
 editor: visual
 ---
 
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+## Carregando pacotes e os Dados do CEAPS
 
 ```{r}
-1 + 1
+#| label: setup
+
+library(tidyverse)
+library(plotly)
+
+ceaps <- readRDS("data/despesa_ceaps_corrigido.rds")
 ```
 
-You can add options to executable code like this
+## Análise Exploratória dos Dados
+
+Principais perguntas:
+
+-   Como é a evolução do valor reembolsado ao longo dos anos?
+
+-   Qual senador declarou mais despesas?
+
+-   Qual tipo de despesa possui maiores valores de reembolso?
+
+-   Qual a distribuição dos valores de reembolso?
+
+-   Existe algum mês em que os senadores declaram mais despesas?
+
+### Série temporal dos valores reimbolsados
+
+Entre 2010 e 2013 houve um aumento significativo (quase o dobro) dos valores reembolsados pelos senadores. Em 2020, houve uma leve redução. Esse pode ter sido o efeito do início da pandemia do COVID-19 e seus sequentes lockdowns.
 
 ```{r}
-#| echo: false
-2 * 2
+#| label: time-series
+
+ano_despesa <- ceaps %>% 
+  group_by(ano) %>% 
+  summarise(despesas = sum(valor_reembolsado, na.rm = TRUE))
+
+plot_time <- ggplot(ano_despesa, aes(x = ano, y = despesas)) +
+  geom_line(color = "#01740A") +
+  geom_point(color = "#01740A") +
+  scale_x_continuous(
+    breaks = seq(min(ano_despesa$ano), max(ano_despesa$ano), 1),
+    minor_breaks = NULL
+  ) +
+  scale_y_continuous(
+    limits = c(0, max(ano_despesa$despesas)),
+    labels = scales::dollar_format(
+      prefix = "R$", big.mark = ".", decimal.mark = ","
+    )
+  ) +
+  theme_minimal() +
+  labs(x = "Ano", y = "Valores Reembolsados")
+
+ggplotly(plot_time)
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+### Despesa entre Senadores
+
+Dentro da lista de 277 senadores entre 2008 e 2021, segue a lista dos 10 com mais valores reembolsados:
+
+```{r}
+#| label: plot_senadores
+
+senador_despesas <- ceaps %>% 
+  group_by(senador) %>% 
+  summarise(despesas = sum(valor_reembolsado, na.rm = TRUE)) %>% 
+  arrange(-despesas)
+
+plot_senador <- senador_despesas %>% 
+  slice_head(n = 10) %>% 
+  mutate(senador = fct_reorder(senador, despesas)) %>% 
+  ggplot(aes(x = senador, y = despesas)) +
+  geom_col(fill = "#01740A") +
+  geom_text(
+    aes(label = senador),
+    y = 8 * 10 ^ 4,
+    hjust = 0,
+    color = "#E8E8E8"
+  ) +
+  geom_text(
+    aes(label = scales::dollar(
+      despesas, prefix = "R$", big.mark = ".", decimal.mark = ","
+    )),
+    color = "#E8E8E8",
+    nudge_y = -3 * 10^5
+  ) +
+  coord_flip() +
+  theme_void()
+
+plot_senador
+```
