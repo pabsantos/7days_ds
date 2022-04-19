@@ -99,3 +99,32 @@ plot_senador <- senador_despesas %>%
 
 plot_senador
 ```
+
+Entre todos os senadores, qual a distribuição dos gastos? Observando o histograma e a mediana dos valores, mais da metade dos senadores apresentam menos de 1 milhão de reais em valores reembolsados.
+
+```{r}
+#| label: plot_dist_senadores
+
+ggplot(senador_despesas, aes(despesas)) +
+  geom_vline(
+    xintercept = median(senador_despesas$despesas),
+    lty = "dashed",
+    color = "#BF620B"
+  ) +
+  geom_histogram(color = "#E8E8E8", fill = "#01740A") +
+  scale_x_continuous(
+    labels = scales::dollar_format(
+      prefix = "R$", big.mark = ".", decimal.mark = ","
+    )
+  ) +
+  theme_minimal() +
+  theme(
+    axis.title.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    axis.text.y = element_blank(),
+    axis.title.x = element_blank(),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank()
+  )
+
+```
