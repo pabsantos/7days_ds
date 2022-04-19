@@ -1,11 +1,12 @@
 ---
 title: "7 Days of Code - Dia 2"
 author: "pabsantos"
-format: html
+format: 
+  html:
+    code-fold: true
 execute: 
   warning: false
   message: false
-  cache: true
 editor: visual
 ---
 
@@ -17,7 +18,7 @@ editor: visual
 library(tidyverse)
 library(plotly)
 
-ceaps <- readRDS("data/despesa_ceaps_corrigido.rds")
+ceaps <- readRDS("~/Documents/alura_ds/data/despesa_ceaps_corrigido.rds")
 ```
 
 ## Análise Exploratória dos Dados
@@ -40,6 +41,7 @@ Entre 2010 e 2013 houve um aumento significativo (quase o dobro) dos valores ree
 
 ```{r}
 #| label: time-series
+#| column: page
 
 ano_despesa <- ceaps %>% 
   group_by(ano) %>% 
@@ -70,23 +72,19 @@ Dentro da lista de 277 senadores entre 2008 e 2021, segue a lista dos 10 com mai
 
 ```{r}
 #| label: plot_senadores
+#| fig-align: center
+#| column: page
 
 senador_despesas <- ceaps %>% 
   group_by(senador) %>% 
   summarise(despesas = sum(valor_reembolsado, na.rm = TRUE)) %>% 
   arrange(-despesas)
 
-plot_senador <- senador_despesas %>% 
-  slice_head(n = 10) %>% 
-  mutate(senador = fct_reorder(senador, despesas)) %>% 
+plot_senador <- senador_despesas %>%
+  slice_head(n = 10) %>%
+  mutate(senador = fct_reorder(senador, despesas)) %>%
   ggplot(aes(x = senador, y = despesas)) +
   geom_col(fill = "#01740A") +
-  geom_text(
-    aes(label = senador),
-    y = 8 * 10 ^ 4,
-    hjust = 0,
-    color = "#E8E8E8"
-  ) +
   geom_text(
     aes(label = scales::dollar(
       despesas, prefix = "R$", big.mark = ".", decimal.mark = ","
@@ -95,17 +93,28 @@ plot_senador <- senador_despesas %>%
     nudge_y = -3 * 10^5
   ) +
   coord_flip() +
-  theme_void()
+  theme_minimal() +
+  theme(
+    panel.grid = element_blank(),
+    axis.title.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    axis.title.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.text.x = element_blank()
+  )
 
-plot_senador
+ggplotly(plot_senador)
+
 ```
 
 Entre todos os senadores, qual a distribuição dos gastos? Observando o histograma e a mediana dos valores, mais da metade dos senadores apresentam menos de 1 milhão de reais em valores reembolsados.
 
 ```{r}
 #| label: plot_dist_senadores
+#| column: page
+#| fig-align: center
 
-ggplot(senador_despesas, aes(despesas)) +
+plot_dist_senadores <- ggplot(senador_despesas, aes(despesas)) +
   geom_vline(
     xintercept = median(senador_despesas$despesas),
     lty = "dashed",
@@ -127,4 +136,5 @@ ggplot(senador_despesas, aes(despesas)) +
     panel.grid.minor.y = element_blank()
   )
 
+ggplotly(plot_dist_senadores)
 ```
