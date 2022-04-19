@@ -107,23 +107,45 @@
 </section>
 <section id="carregando-dados-do-ceaps" class="level2">
 <h2 class="anchored" data-anchor-id="carregando-dados-do-ceaps">Carregando Dados do CEAPS</h2>
-<p>Download dos dados de 2017 à 2021. A primeira linha possui metadados, então foi removida. Por padrão, os dados são lidos em UTF-8, o que causa um erro em strings com acento.</p>
-<div class="cell" data-hash="dia_01_cache/html/load-data_0ca2c0a75603d8188f11b451269ada35">
+<p>Download dos dados de 2008 à 2021. A primeira linha possui metadados, então foi removida. Por padrão, os dados são lidos em UTF-8, o que causa um erro em strings com acento.</p>
+<div class="cell" data-hash="dia_01_cache/html/load-data_df705de908362710c36c24d6e5b351f6">
 <div class="sourceCode" id="cb2"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>urls <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://www.senado.gov.br/transparencia/LAI/verba/despesa_ceaps_2021.csv"</span>,</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://www.senado.gov.br/transparencia/LAI/verba/despesa_ceaps_2020.csv"</span>,</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://www.senado.gov.br/transparencia/LAI/verba/despesa_ceaps_2019.csv"</span>,</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://www.senado.gov.br/transparencia/LAI/verba/despesa_ceaps_2018.csv"</span>,</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://www.senado.gov.br/transparencia/LAI/verba/despesa_ceaps_2017.csv"</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"data/despesa_ceaps.rds"</span>)) {</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  ceaps <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/despesa_ceaps.rds"</span>)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  ceaps <span class="ot">&lt;-</span> <span class="fu">map</span>(urls, <span class="sc">~</span><span class="fu">read_csv2</span>(.x, <span class="at">skip =</span> <span class="dv">1</span>))</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  ceaps <span class="ot">&lt;-</span> <span class="fu">reduce</span>(ceaps, bind_rows)</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">#saveRDS(ceaps, "data/despesa_ceaps.rds")</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://www.senado.gov.br/transparencia/LAI/verba/despesa_ceaps_2017.csv"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://www.senado.gov.br/transparencia/LAI/verba/despesa_ceaps_2016.csv"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://www.senado.gov.br/transparencia/LAI/verba/despesa_ceaps_2015.csv"</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://www.senado.gov.br/transparencia/LAI/verba/despesa_ceaps_2014.csv"</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://www.senado.gov.br/transparencia/LAI/verba/despesa_ceaps_2013.csv"</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://www.senado.gov.br/transparencia/LAI/verba/despesa_ceaps_2012.csv"</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://www.senado.gov.br/transparencia/LAI/verba/despesa_ceaps_2011.csv"</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://www.senado.gov.br/transparencia/LAI/verba/despesa_ceaps_2010.csv"</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://www.senado.gov.br/transparencia/LAI/verba/despesa_ceaps_2009.csv"</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://www.senado.gov.br/transparencia/LAI/verba/despesa_ceaps_2008.csv"</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"data/despesa_ceaps.rds"</span>)) {</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  ceaps <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/despesa_ceaps.rds"</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  cols <span class="ot">&lt;-</span> <span class="fu">cols</span>(</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">ANO =</span> <span class="fu">col_number</span>(),</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">MES =</span> <span class="fu">col_number</span>(),</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">SENADOR =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">TIPO_DESPESA =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">CNPJ_CPF =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">FORNECEDOR =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">DOCUMENTO =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">DATA =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">DETALHAMENTO =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">VALOR_REEMBOLSADO =</span> <span class="fu">col_number</span>(),</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">COD_DOCUMENTO =</span> <span class="fu">col_number</span>()</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  ceaps <span class="ot">&lt;-</span> <span class="fu">map</span>(urls, <span class="sc">~</span><span class="fu">read_csv2</span>(.x, <span class="at">skip =</span> <span class="dv">1</span>, <span class="at">col_types =</span> cols))</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>  ceaps <span class="ot">&lt;-</span> <span class="fu">reduce</span>(ceaps, bind_rows)</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>  <span class="co">#saveRDS(ceaps, "data/despesa_ceaps.rds")</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="variáveis" class="level2">
@@ -356,7 +378,7 @@
 </table>
 </div>
 </div>
-<p>Variáveis com valores vazios: DOCUMENTO e DETALHAMENTO.</p>
+<p>Variáveis com valores vazios: DOCUMENTO, DETALHAMENTO, CNPJ_CPF, FORNECEDOR, DATA.</p>
 <p>Verificando os valores únicos de TIPO_DESPESA:</p>
 <div class="cell" data-hash="dia_01_cache/html/despesa_8a8fe7f042ceb872fa1b82bea7c38df6">
 <div class="sourceCode" id="cb4"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(ceaps<span class="sc">$</span>TIPO_DESPESA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
