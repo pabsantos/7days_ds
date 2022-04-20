@@ -31,11 +31,7 @@ Principais perguntas:
 
 -   Qual tipo de despesa possui maiores valores de reembolso?
 
--   Qual a distribuição dos valores de reembolso?
-
--   Existe algum mês em que os senadores declaram mais despesas?
-
-### Série temporal dos valores reimbolsados
+### Série Temporal dos Valores Reimbolsados
 
 Entre 2010 e 2013 houve um aumento significativo (quase o dobro) dos valores reembolsados pelos senadores. Em 2020, houve uma leve redução. Esse pode ter sido o efeito do início da pandemia do COVID-19 e seus sequentes lockdowns.
 
@@ -90,7 +86,7 @@ plot_senador <- senador_despesas %>%
       despesas, prefix = "R$", big.mark = ".", decimal.mark = ","
     )),
     color = "#E8E8E8",
-    nudge_y = -3 * 10^5
+    nudge_y = -4 * 10^5
   ) +
   coord_flip() +
   theme_minimal() +
