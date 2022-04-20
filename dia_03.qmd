@@ -22,7 +22,7 @@ ceaps_serie <- vroom::vroom("data/dataset_ceaps_forecasting.csv")
 
 ## Forecasting
 
-Com base nos dados diários, fazer uma previsão de gastos para os próximos três meses. O primeiro passo do processo foi acumular o valor de gastos dos senadores por dia. Verificando a serie temporal:
+Com base nos dados diários, fazer uma previsão de gastos para os próximos três meses. O primeiro passo do processo foi acumular o valor de gastos dos senadores por mês. Verificando a serie temporal:
 
 ```{r}
 #| label: plot_series
@@ -76,3 +76,26 @@ prophet_plot_components(model, forecast)
 ```
 
 ### Diagnósticos do Modelo
+
+Extração do diagnóstico do modelo utilizando Cross Validation.
+
+```{r}
+#| label: model-diag
+
+model_cv <- cross_validation(model, horizon = 90, units = "days")
+
+model_performance <- performance_metrics(model_cv)
+```
+
+Plotando MAPE
+
+-   MAPE
+
+```{r}
+#| label: mape-plot
+
+plot_cross_validation_metric(model_cv, metric = "mape") +
+  theme_minimal() +
+  scale_x_continuous(breaks = seq(0, 90, 10), minor_breaks = NULL) +
+  scale_y_continuous(minor_breaks = NULL)
+```
