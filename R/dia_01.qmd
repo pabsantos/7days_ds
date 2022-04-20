@@ -95,14 +95,18 @@ Modificação de valores para facilitar a análise:
 
 -   Modificar os tipos em TIPO_DESPESA;
 
+-   Remover valores incorretos de DATA (NA e fora do padrao);
+
 -   Modificar a variável DATA para o formato dd/mm/yyyy.
 
 ```{r}
 #| label: wrangling
 
-ceaps <- ceaps %>% 
+ceaps_corrigido <- ceaps %>% 
   janitor::clean_names() %>% 
-  mutate(across(where(is.character), ~str_conv(.x, "latin1"))) %>% 
+  mutate(across(where(is.character), ~str_conv(.x, "latin1"))) %>%
+  filter(!is.na(data)) %>% 
+  filter(str_length(data) == 10) %>% 
   mutate(tipo_despesa = case_when(
     str_starts(tipo_despesa, "Aluguel") ~ "Aluguel de Imóveis",
     str_starts(tipo_despesa, "Passagens") ~ 
@@ -111,11 +115,9 @@ ceaps <- ceaps %>%
     str_starts(tipo_despesa, "Aquisição") ~ 
       "Materiais e equipamentos",
     TRUE ~ tipo_despesa
-    ),
-    data = lubridate::dmy(data)
-  )
+    ), data = lubridate::dmy(data))
 
-knitr::kable(head(ceaps))
+knitr::kable(head(ceaps_corrigido))
 ```
 
 Salvando a nova versão
@@ -123,5 +125,5 @@ Salvando a nova versão
 ```{r}
 #| label: save
 
-#saveRDS(ceaps, "data/despesa_ceaps_corrigido.rds")
+#saveRDS(ceaps_corrigido, "data/despesa_ceaps_corrigido.rds")
 ```
