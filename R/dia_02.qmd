@@ -17,7 +17,6 @@ editor: visual
 
 library(tidyverse)
 library(plotly)
-library(prophet)
 
 ceaps <- readRDS("~/Documents/alura_ds/data/despesa_ceaps_corrigido.rds")
 ```

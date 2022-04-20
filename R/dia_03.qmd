@@ -17,6 +17,7 @@ editor: visual
 
 library(tidyverse)
 library(plotly)
+library(prophet)
 
 ceaps_serie <- vroom::vroom("data/dataset_ceaps_forecasting.csv")
 ```
@@ -46,10 +47,29 @@ series_plot <- ggplot(ceaps_serie, aes(ds, y)) +
 ggplotly(series_plot)
 ```
 
-Aplicando os métodos do pacote `prophet:`
+Aplicando os métodos do pacote `prophet` e fazendo a previsão de 30 dias:
 
 ```{r}
 #| label: forecast
-prophet()
 
+model <- prophet(ceaps_serie)
+
+pred_dates <- make_future_dataframe(model, periods = 90)
+
+forecast <- predict(model, pred_dates)
+```
+
+Plotando os resultados do modelo
+
+```{r}
+#| label: plot_forecast
+
+dyplot.prophet(model, forecast)
+
+```
+
+Plotando os componentes do modelo de previsão:
+
+```{r}
+#| label: components
 ```
