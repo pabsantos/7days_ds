@@ -1,27 +1,55 @@
 ---
 title: "7 Days of Code - Dia 3"
 author: "pabsantos"
-format: html
+format: 
+  html:
+
+execute: 
+  warning: false
+  message: false
 editor: visual
 ---
 
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+## Carregando Pacotes e Dados do CEAPS
 
 ```{r}
-1 + 1
+#| label: setup
+
+library(tidyverse)
+library(plotly)
+
+ceaps_serie <- vroom::vroom("data/dataset_ceaps_forecasting.csv")
 ```
 
-You can add options to executable code like this
+## Forecasting
+
+Com base nos dados diários, fazer uma previsão de gastos para os próximos três meses. O primeiro passo do processo foi acumular o valor de gastos dos senadores por dia. Verificando a serie temporal:
 
 ```{r}
-#| echo: false
-2 * 2
+#| label: plot_series
+
+series_plot <- ggplot(ceaps_serie, aes(ds, y)) +
+  geom_line(lwd = 0.2, color = "Grey20") +
+  scale_x_date(date_breaks = "6 months") +
+  theme_minimal() +
+  scale_y_continuous(
+    minor_breaks = NULL,
+    labels = scales::dollar_format(
+      prefix = "R$",
+      big.mark = ".",
+      decimal.mark = ","
+    )
+  ) +
+  labs(y = "Valor gasto") +
+  theme(axis.title.x = element_blank())
+
+ggplotly(series_plot)
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+Aplicando os métodos do pacote `prophet:`
+
+```{r}
+#| label: forecast
+prophet()
+
+```
