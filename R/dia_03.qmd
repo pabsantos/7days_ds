@@ -1,9 +1,7 @@
 ---
 title: "7 Days of Code - Dia 3"
 author: "pabsantos"
-format: 
-  html:
-
+format: html
 execute: 
   warning: false
   message: false
@@ -68,8 +66,13 @@ dyplot.prophet(model, forecast)
 
 ```
 
-Plotando os componentes do modelo de previsão:
+Plotando os componentes do modelo de previsão. Entre 2018 e 2020 houve uma tendência de redução nos gastos dos senadores. Entre 2020 e 2021 essa tendência bateu o menor valor. Tal evento pode estar correlacionado com a pandemia do COVID-19. Após 2021 esses gastos voltaram a subir. Em relação aos dias da semana,
 
 ```{r}
 #| label: components
+
+prophet_plot_components(model, forecast)
+
 ```
+
+### Diagnósticos do Modelo
