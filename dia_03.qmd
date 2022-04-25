@@ -89,8 +89,6 @@ model_performance <- performance_metrics(model_cv)
 
 Plotando MAPE
 
--   MAPE
-
 ```{r}
 #| label: mape-plot
 
@@ -99,3 +97,5 @@ plot_cross_validation_metric(model_cv, metric = "mape") +
   scale_x_continuous(breaks = seq(0, 90, 10), minor_breaks = NULL) +
   scale_y_continuous(minor_breaks = NULL)
 ```
+
+Em geral, esse modelo não obteve boa performance. Futuros passos devem testar os hyperparâmetros para chegar a melhores resultados.
