@@ -5,7 +5,7 @@ Projeto com solução das atividades disponíveis do [7 Days of Code](https://7d
 Relatórios publicados:
 - [Dia 1](https://rpubs.com/pabsantos/days_1)
 - [Dia 2](https://rpubs.com/pabsantos/days_2)
-- [Dia 3]()
+- [Dia 3](https://rpubs.com/pabsantos/days_3)
 - [Dia 4]()
 - [Dia 5]()
 - [Dia 6]()
